@@ -1,0 +1,16 @@
+{
+  "name": "webpack-exercise-apptension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.dev.js",
+  "dependencies": {
+    "lodash": "^4.17.2"
+  },
+  "devDependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeqcp/webpack-exercise-apptension.git"
+  },
+  "author": "Apptension"
+}
