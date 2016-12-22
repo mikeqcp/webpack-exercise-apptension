@@ -42,7 +42,10 @@ module.exports = {
             'src',
             'node_modules'
         ],
-        extensions: ['', '.json', '.js', '.jsx', '.css']
+        extensions: ['', '.json', '.js', '.jsx', '.css'],
+        alias: {
+            'config': 'env/prod/conf.js'
+        }
     },
     plugins: [
         new CleanPlugin('dist'),
@@ -54,6 +57,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             chunks: ['unsupported'],
             filename: 'unsupported.html'
-        })
+        }),
+        new webpack.DefinePlugin({
+            __PRODUCTION__: true
+        }),
     ]
 };
