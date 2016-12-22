@@ -1,0 +1,18 @@
+body {
+  color: #48beff;
+  text-align: center;
+  background: url(492bde356a7e34d08919793d2cb19ed4.jpg) center;
+  background-size: cover;
+}
+
+h1 {
+  display: inline-block;
+  padding: 10rem;
+}
+
+p {
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+}
+
+/*# sourceMappingURL=main-8fe4a5cad9a4f4d65e28.css.map*/
