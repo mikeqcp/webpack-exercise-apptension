@@ -1,4 +1,7 @@
 @import "variables";
+@import "../sprites/sprite";
+
+@include retina-sprites($retina-groups);
 
 body {
 	color: $main-color;
@@ -10,6 +13,14 @@ body {
 h1 {
 	display: inline-block;
 	padding: 10rem;
+
+	&:after {
+		content: '';
+		display: inline-block;
+		@include retina-sprite($icon-group);
+		transform: scale(2);
+		transform-origin: left bottom;
+	}
 }
 
 p {

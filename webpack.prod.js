@@ -7,9 +7,10 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const SpritesmithPlugin = require('webpack-spritesmith');
 
 module.exports = {
-    devtool: 'source-map',
     context: path.resolve(__dirname),
     entry: {
         'main': [
@@ -30,36 +31,58 @@ module.exports = {
         loaders: [
             { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
             { test: /\.json$/, loader: 'json-loader', exclude: /build\.info\.json$/ },
-            { test: /\.(png|jpg)$/, loader: "file" },
+            { test: /\.(png|jpg)$/, loader: "file-loader" },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style', 'css?importLoaders=2&sourceMap!autoprefixer?{browsers:["last 2 version", "> 5%", "iOS >= 7"]}!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
-            },
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: 'css-loader?minimize=true!postcss-loader!sass-loader'
+                })
+            }
         ]
     },
     resolve: {
-        modulesDirectories: [
+        modules: [
             'src',
             'node_modules'
         ],
-        extensions: ['', '.json', '.js', '.jsx', '.css'],
+        extensions: ['.json', '.js', '.jsx', '.scss', '.css'],
         alias: {
             'config': 'env/prod/conf.js'
         }
     },
     plugins: [
         new CleanPlugin('dist'),
-        new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
+        new ExtractTextPlugin({filename: '[name]-[chunkhash].css', allChunks: true}),
         new HtmlWebpackPlugin({
-            chunks: ['main'],
-            filename: 'main.html'
+            chunks: ['main', 'common'],
+            filename: 'index.html'
         }),
         new HtmlWebpackPlugin({
-            chunks: ['unsupported'],
+            chunks: ['unsupported', 'common'],
             filename: 'unsupported.html'
         }),
         new webpack.DefinePlugin({
             __PRODUCTION__: true
         }),
+        new UglifyJSPlugin(),
+        new SpritesmithPlugin({
+            src: {
+                cwd: path.resolve(__dirname, 'images/sprites'),
+                glob: '*.png'
+            },
+            target: {
+                image: path.resolve(__dirname, 'src/sprites/sprite.png'),
+                css: path.resolve(__dirname, 'src/sprites/sprite.scss')
+            },
+            apiOptions: {
+                cssImageRef: "../sprites/sprite.png"
+            },
+            retina: '@2x'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'common',
+            minChunks: 2,
+        })
     ]
 };
