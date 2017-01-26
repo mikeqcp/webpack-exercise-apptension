@@ -1,6 +1,7 @@
 'use strict';
 var webpack = require("webpack");
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -21,20 +22,14 @@ module.exports = {
                 loader: 'babel-loader'
             },
             {
-                test: /\.css$/,
-                loaders: [
-                    'style-loader',
-                    'css-loader?importLoaders=1',
-                    'postcss-loader'
-                ]
-            },
-            {
                 test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
-            }]
+                loaders: ["style-loader", "css-loader", 'postcss-loader', "sass-loader"]
+            }
+        ]
 
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true})
+        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+        new HtmlWebpackPlugin()
     ]
 };

@@ -2,6 +2,9 @@
 var webpack = require("webpack");
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var definePlugin = new webpack.DefinePlugin({
+    __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PROD || 'true'))
+});
 
 module.exports = {
     entry: {
@@ -30,6 +33,7 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({minimize: true}),
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin(),
+        definePlugin
     ]
 };
