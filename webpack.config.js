@@ -56,7 +56,7 @@ module.exports = {
             name: "common"
         }),
         new FaviconsWebpackPlugin({
-            logo: path.join(__dirname, 'images/background.jpg')
+            logo: path.join(__dirname, '/images/background.jpg')
         })
     ]
 };
