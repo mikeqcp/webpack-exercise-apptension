@@ -6,6 +6,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var definePlugin = new webpack.DefinePlugin({
     __PRODUCTION__: process.env.NODE_ENV === 'prod'
 });
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const envMap = {
     dev: 'local',
@@ -33,7 +36,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", 'postcss-loader', "sass-loader"]
+                loader: ExtractTextPlugin.extract('css!sass')
             }
         ]
 
@@ -46,6 +49,14 @@ module.exports = {
     plugins: [
         new webpack.optimize.UglifyJsPlugin({minimize: true}),
         new HtmlWebpackPlugin(),
-        definePlugin
+        definePlugin,
+        new ExtractTextPlugin('style-[hash].css'),
+        new CommonsChunkPlugin({
+            filename: "common.js",
+            name: "common"
+        }),
+        new FaviconsWebpackPlugin({
+            logo: path.join(__dirname, 'images/background.jpg')
+        })
     ]
 };
