@@ -1,10 +1,16 @@
 'use strict';
+
 var webpack = require("webpack");
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var definePlugin = new webpack.DefinePlugin({
-    __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PROD || 'true'))
+    __PRODUCTION__: process.env.NODE_ENV === 'prod'
 });
+
+const envMap = {
+    dev: 'local',
+    prod: 'prod'
+};
 
 module.exports = {
     entry: {
@@ -18,6 +24,7 @@ module.exports = {
     },
     module: {
         loaders: [
+            {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
             {test: /\.json$/, loader: "json-loader"},
             {
                 test: /\.js$/,
@@ -30,6 +37,11 @@ module.exports = {
             }
         ]
 
+    },
+    resolve: {
+        alias: {
+            config: path.resolve(__dirname, 'src', 'env', envMap[process.env.NODE_ENV], 'conf')
+        }
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({minimize: true}),
